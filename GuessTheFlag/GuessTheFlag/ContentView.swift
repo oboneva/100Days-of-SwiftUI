@@ -8,63 +8,62 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var showingAlert = false
+    @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
+    @State private var correctAnswer = Int.random(in: 0...2)
+    
+    @State private var showingScore = false
+    @State private var scoreTitle = "" 
     
     var body: some View {
-//        VStack(alignment: .leading, spacing: 20) {
-//            HStack(spacing: 20) {
-//                Text("Hello, world!")
-//                Text("Hello, world!")
-//                Text("Hello, world!")
-//            }
-//            
-//            HStack(spacing: 20) {
-//                Text("Hello, world!")
-//                Text("Hello, world!")
-//                Text("Hello, world!")
-//            }
-//            
-//            HStack(spacing: 20) {
-//                Text("Hello, world!")
-//                Text("Hello, world!")
-//                Text("Hello, world!")
-//            }
-//        }
-        
-//        ZStack {
-////            Color.red.frame(width: 200, height: 200)
-//            Color.red.edgesIgnoringSafeArea(.bottom)
-//            Text("Hello, world!")
-//                .background(Color.white)
-//        }
-        
-//        ZStack {
-//            LinearGradient(gradient: Gradient(colors: [.white, .black]), startPoint: .top, endPoint: .bottom)
+        ZStack {
+            LinearGradient(gradient: Gradient(colors: [.blue, .black]), startPoint: .top, endPoint: .bottom)
+                .edgesIgnoringSafeArea(.all)
             
-//            RadialGradient(gradient: Gradient(colors: [.blue, .white]), center: .center, startRadius: 20, endRadius: 200)
-            
-//            AngularGradient(gradient: Gradient(colors: [.red, .yellow, .green, .blue, .purple, .red]), center: .center)
-//        }.ignoresSafeArea(edges: .bottom)
-        
-//        Button("Tap me") {
-//            print("Button was tapped!!")
-//        }
-        
-//        Button(action: {
-//            print("Button was tapped!!")
-//        }) {
-//            HStack(spacing: 10) {
-//                Image(systemName: "pencil")
-//                Text("Edit")
-//            }
-//        }
-        
-        Button("Tap") {
-            self.showingAlert = true
+            VStack(spacing: 30) {
+                VStack {
+                    Text("Tap the flag of")
+                        .foregroundColor(Color.white)
+                    Text(countries[correctAnswer])
+                        .font(.largeTitle)
+                        .fontWeight(.black)
+                        .foregroundColor(Color.white)
+                }
+                
+                ForEach(0 ..< 3) { number in
+                    Button(action: {
+                        self.flagTapped(number)
+                    }) {
+                        Image(countries[number])
+                            .renderingMode(.original)
+                            .clipShape(Capsule())
+                            .overlay(Capsule().stroke(Color.black, lineWidth: 1))
+                            .shadow(color: .black, radius: 2)
+                    }
+                }
+                
+                Spacer()
+            }
         }
-        .alert(isPresented: $showingAlert) { 
-            Alert(title: Text("Alert"), message: Text("alerty alert"), dismissButton: .default(Text("Ok")))
+        .alert(isPresented: $showingScore) {
+            Alert(title: Text(scoreTitle), message: Text("Your score is ???"), dismissButton: .default(Text("Continue")) {
+                self.askQuestion()
+            })
         }
+    }
+    
+    func flagTapped(_ number: Int) {
+        if number == correctAnswer {
+            scoreTitle = "Correct"
+        } else {
+            scoreTitle = "Wrong"
+        }
+        
+        showingScore = true
+    }
+    
+    func askQuestion() {
+        countries.shuffle()
+        correctAnswer = Int.random(in: 0...2)
     }
 }
 
