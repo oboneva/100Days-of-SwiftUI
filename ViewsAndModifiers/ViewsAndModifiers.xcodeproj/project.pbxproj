@@ -12,6 +12,7 @@
 		C945CE9D261662A000E020FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C945CE9C261662A000E020FE /* Assets.xcassets */; };
 		C945CEA0261662A000E020FE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C945CE9F261662A000E020FE /* Preview Assets.xcassets */; };
 		C96A58B2261795960090B154 /* GridStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96A58B1261795960090B154 /* GridStack.swift */; };
+		C96A58B526179BAF0090B154 /* LargeBlueFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96A58B426179BAF0090B154 /* LargeBlueFont.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		C945CE9F261662A000E020FE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C945CEA1261662A000E020FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C96A58B1261795960090B154 /* GridStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridStack.swift; sourceTree = "<group>"; };
+		C96A58B426179BAF0090B154 /* LargeBlueFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeBlueFont.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 				C945CEA1261662A000E020FE /* Info.plist */,
 				C945CE9E261662A000E020FE /* Preview Content */,
 				C96A58B1261795960090B154 /* GridStack.swift */,
+				C96A58B426179BAF0090B154 /* LargeBlueFont.swift */,
 			);
 			path = ViewsAndModifiers;
 			sourceTree = "<group>";
@@ -141,6 +144,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C96A58B526179BAF0090B154 /* LargeBlueFont.swift in Sources */,
 				C945CE9B2616629F00E020FE /* ContentView.swift in Sources */,
 				C945CE992616629F00E020FE /* ViewsAndModifiersApp.swift in Sources */,
 				C96A58B2261795960090B154 /* GridStack.swift in Sources */,
