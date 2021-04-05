@@ -12,9 +12,11 @@ struct ContentView: View {
     @State private var wakeUpAt = defaultWakeTime
     @State private var coffeeAmount = 1
     
-    @State private var alertTitle = ""
+    @State private var alertTitle = "Your ideal bedtime is…"
     @State private var alertMessage = ""
     @State private var showingAlert = false
+    
+    let sleepCalculator = SleepCalculator()
     
     static var defaultWakeTime: Date {
         var components = DateComponents()
@@ -33,25 +35,23 @@ struct ContentView: View {
                     .labelsHidden()
                     .datePickerStyle(WheelDatePickerStyle())
                 
-                VStack(alignment: .leading, spacing: 0) {
-                    Text("Desired amount of sleep")
-                        .font(.headline)
-
+                Section(header: Text("Desired amount of sleep")) {
                     Stepper(value: $hoursOfSleep, in: 4...12, step: 0.25) {
                         Text("\(hoursOfSleep, specifier: "%g") hours")
                     }
                 }
                 
-                VStack(alignment: .leading, spacing: 0) {
-                    Text("Daily coffee intake")
-                        .font(.headline)
-                    
-                    Stepper(value: $coffeeAmount, in: 1...20) {
-                        coffeeAmount == 1 ?
+                Text("When do you want to wake up?")
+                    .font(.headline)
+                
+                Picker("Daily coffee intake", selection: $coffeeAmount) {
+                    ForEach(0..<20) { value in
+                        value == 1 ?
                             Text("1 cup") :
-                            Text("\(coffeeAmount) cups")
-                    }
+                            Text("\(value) cups")
+                    }    
                 }
+                .pickerStyle(WheelPickerStyle())
             }
             .navigationBarTitle(Text("BetterRest"))
             .navigationBarItems(trailing:
@@ -66,9 +66,7 @@ struct ContentView: View {
     }
     
     func calculateBedtime() {
-        let sleepCalculator = SleepCalculator()
-        
-        let components = Calendar.current.dateComponents([.hour, .minute], from: wakeUpAt)
+        let components = Calendar.current.dateComponents([.hour, .minute], from: self.wakeUpAt)
         let hour = (components.hour ?? 0) * 60 * 60
         let minute = (components.minute ?? 0) * 60
         
