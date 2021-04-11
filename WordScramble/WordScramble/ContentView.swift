@@ -16,6 +16,8 @@ struct ContentView: View {
     @State private var errorMessage = ""
     @State private var showingError = false
     
+    @State private var score = 0
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -28,12 +30,19 @@ struct ContentView: View {
                     Image(systemName: "\($0.count).circle")
                     Text($0)
                 }
+                
+                Text("Total score \(score)")
             }
             .navigationBarTitle(rootWord)
             .onAppear(perform: startGame)
             .alert(isPresented: $showingError) {
                 Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("Ok")))
             }
+            .navigationBarItems(trailing: 
+                Button(action: startGame) {
+                    Text("Start again")
+                }
+            )
         }
     }
     
@@ -60,6 +69,7 @@ struct ContentView: View {
         }
         
         usedWords.insert(answer, at: 0)
+        score += answer.count
         newWord = ""
     }
     
@@ -68,6 +78,8 @@ struct ContentView: View {
             if let startWords = try? String(contentsOf: startWordsURL) {
                 let allWords = startWords.components(separatedBy: "\n")
                 rootWord = allWords.randomElement() ?? "silkworm"
+                usedWords = []
+                score = 0
                 return
             }
         }
@@ -76,7 +88,7 @@ struct ContentView: View {
     }
     
     func isOriginal(word: String) -> Bool {
-        !usedWords.contains(word)
+        word != rootWord && !usedWords.contains(word)
     }
     
     func isPossible(word: String) -> Bool {
@@ -94,6 +106,10 @@ struct ContentView: View {
     }
     
     func isReal(word: String) -> Bool {
+        guard word.count > 3 else {
+            return false
+        }
+        
         let checker = UITextChecker()
         let range = NSRange(location: 0, length: word.utf16.count)
         let misspelledRange = checker.rangeOfMisspelledWord(in: word, range: range, startingAt: 0, wrap: false, language: "en")
