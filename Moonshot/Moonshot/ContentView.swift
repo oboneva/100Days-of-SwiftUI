@@ -18,51 +18,24 @@ struct User: Codable {
 }
 
 struct ContentView: View {
+    let astronauts: [Astronaut] = Bundle.main.decode(file: "astronauts.json")
+    let missions: [Mission] = Bundle.main.decode(file: "missions.json")
+    
     var body: some View {
-//        VStack {
-//            GeometryReader { geo in
-//                Image("Screenshot")
-//                    .resizable()
-//                    .aspectRatio(contentMode: .fit)
-//                    .frame(width: geo.size.width)
-//            }
-//        }      
-        
-//        ScrollView(.vertical) {
-//            VStack(spacing: 10) {
-//                ForEach(0..<100) {
-//                    Text("Item \($0)")
-//                        .font(.title)
-//                }
-//            }
-//            .frame(maxWidth: .infinity)
-//        }
-        
-//        NavigationView {
-//            List(0..<100) { row in
-//                NavigationLink(destination: Text("Detail \(row)")) {
-//                        Text("Row \(row)")
-//                }
-//            }
-//            .navigationBarTitle("SwiftUI")
-//        }
-        
-        Button("Decode JSON") {
-            let input = """
-            {
-                "name": "Taylor Swift",
-                "address": {
-                    "street": "555, Taylor Swift Avenue",
-                    "city": "Nashville"
+        NavigationView {
+            List(missions) { mission in
+                Image(mission.image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 44, height: 44)
+                
+                VStack(alignment: .leading) {
+                    Text(mission.displayName)
+                        .font(.headline)
+                    Text(mission.formattedLaunchDate)
                 }
             }
-            """
-
-            let data = Data(input.utf8)
-            let decoder = JSONDecoder()
-            if let user = try? decoder.decode(User.self, from: data) {
-                print(user.address.street)
-            }
+            .navigationBarTitle("Moonshot")
         }
     }
 }
