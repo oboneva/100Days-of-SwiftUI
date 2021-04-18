@@ -36,4 +36,8 @@ struct Mission: Identifiable, Codable {
             return "N/A"
         }
     }
+    
+    var crewNames: String {
+        return crew.map { $0.name.capitalized }.joined(separator: " ")
+    }
 }

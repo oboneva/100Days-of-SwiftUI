@@ -20,11 +20,12 @@ struct User: Codable {
 struct ContentView: View {
     let astronauts: [Astronaut] = Bundle.main.decode(file: "astronauts.json")
     let missions: [Mission] = Bundle.main.decode(file: "missions.json")
+    @State private var showingCrew = false
     
     var body: some View {
         NavigationView {
             List(missions) { mission in
-                NavigationLink(destination: MissionView(mission: mission, astronauts: astronauts)) {
+                NavigationLink(destination: MissionView(mission: mission, astronauts: astronauts, allMissions: missions)) {
                     Image(mission.image)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
@@ -33,11 +34,16 @@ struct ContentView: View {
                     VStack(alignment: .leading) {
                         Text(mission.displayName)
                             .font(.headline)
-                        Text(mission.formattedLaunchDate)
+                        Text(self.showingCrew ? mission.crewNames : mission.formattedLaunchDate)
                     }
                 }
             }
             .navigationBarTitle("Moonshot")
+            .navigationBarItems(trailing: 
+                                    Button(self.showingCrew ? "Launch" : "Crew") {
+                                        self.showingCrew.toggle()
+                                    }
+            )
         }
     }
 }
