@@ -7,6 +7,64 @@
 
 import SwiftUI
 
+struct Trapezoid: Shape {
+    var insetAmount: CGFloat
+
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+
+        path.move(to: CGPoint(x: 0, y: rect.maxY))
+        path.addLine(to: CGPoint(x: insetAmount, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.maxX - insetAmount, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: 0, y: rect.maxY))
+        
+        return path
+    }
+    
+    var animatableData: CGFloat {
+        get { insetAmount }
+        set { self.insetAmount = newValue }
+    }
+}
+
+struct Checkerboard: Shape {
+    var rows: Int
+    var columns: Int
+
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+
+        let rowSize = rect.height / CGFloat(rows)
+        let columnSize = rect.width / CGFloat(columns)
+
+        for row in 0..<rows {
+            for column in 0..<columns {
+                if (row + column).isMultiple(of: 2) {
+                    let startX = columnSize * CGFloat(column)
+                    let startY = rowSize * CGFloat(row)
+                    let rect = CGRect(x: startX, y: startY, width: columnSize, height: rowSize)
+                    
+                    path.addRect(rect)
+                }
+            }
+        }
+
+        return path
+    }
+    
+    public var animatableData: AnimatablePair<Double, Double> {
+        get {
+           AnimatablePair(Double(rows), Double(columns))
+        }
+
+        set {
+            self.rows = Int(newValue.first)
+            self.columns = Int(newValue.second)
+        }
+    }
+}
+
 struct ContentView: View {
 //    @State private var animationAmount = 0.0
     @State private var enabled = false
@@ -15,6 +73,10 @@ struct ContentView: View {
     let letters = Array("Hello SwiftUI")
     
     @State private var isShowingRed = false
+    @State private var amount: CGFloat = 0.0
+    @State private var insetAmount: CGFloat = 50
+    @State private var rows = 4
+    @State private var columns = 4
     
     var body: some View {
 //        Button("Tap me") {
@@ -141,20 +203,85 @@ struct ContentView: View {
 //                }
 //        )
         
-        VStack {
-            Button("Tap Me") {
-                withAnimation {
-                    self.isShowingRed.toggle()
+//        VStack {
+//            Button("Tap Me") {
+//                withAnimation {
+//                    self.isShowingRed.toggle()
+//                }
+//            }
+//
+//            if isShowingRed {
+//                Rectangle()
+//                    .fill(Color.red)
+//                    .frame(width: 200, height: 200)
+//                    .transition(.pivot)
+//            }
+//        }
+        
+//        ZStack {
+//            Image(systemName: "plus")
+//            
+//            Rectangle()
+//                .fill(Color.red)
+//                .blendMode(.multiply)
+//        }
+//        .frame(width: 300, height: 400)
+//        .clipped()
+        
+//        Image(systemName: "plus")
+//            .colorMultiply(.red)
+        
+//        VStack {
+//            ZStack {
+//                Circle()
+//                    .fill(Color.red)
+//                    .frame(width: 200 * amount)
+//                    .offset(x: -50, y: -80)
+//                    .blendMode(.screen)
+//                Circle()
+//                    .fill(Color.green)
+//                    .frame(width: 200 * amount)
+//                    .offset(x: -50, y: -80)
+//                    .blendMode(.screen)
+//                Circle()
+//                    .fill(Color.blue)
+//                    .frame(width: 200 * amount)
+//                    .offset(x: -50, y: -80)
+//                    .blendMode(.screen)
+//            }
+//            .frame(width: 300, height: 300)
+//            
+//            Slider(value: $amount)
+//                .padding()
+//        }
+//        .frame(maxWidth: .infinity, maxHeight: .infinity)
+//        .background(Color.black)
+//        .edgesIgnoringSafeArea(.all)
+        
+//        Image(systemName: "plus")
+//            .resizable()
+//            .scaledToFit()
+//            .frame(width: 200, height: 200)
+//            .saturation(Double(amount))
+//            .blur(radius: (1 - amount) * 20)
+        
+//        Trapezoid(insetAmount: insetAmount)
+//            .frame(width: 200, height: 100)
+//            .onTapGesture {
+//                withAnimation {
+//                    self.insetAmount = CGFloat.random(in: 10...90)
+//                }
+//            }
+        
+        
+
+        Checkerboard(rows: rows, columns: columns)
+            .onTapGesture {
+                withAnimation(.linear(duration: 3)) {
+                    self.rows = 8
+                    self.columns = 16
                 }
             }
-
-            if isShowingRed {
-                Rectangle()
-                    .fill(Color.red)
-                    .frame(width: 200, height: 200)
-                    .transition(.pivot)
-            }
-        }
     }
 }
 
